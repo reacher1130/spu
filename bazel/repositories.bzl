@@ -52,7 +52,7 @@ def _libpsi():
         urls = [
             "https://github.com/secretflow/psi/archive/refs/tags/v0.4.2b0.tar.gz",
         ],
-        strip_prefix = "psi-v0.4.2b0",
+        strip_prefix = "psi-0.4.2b0",
         sha256 = "b4fef13634ee8c9d32860d17ffbedac661ebde79c29c985d9c0d261341f838ec",
     )
 
