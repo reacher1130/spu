@@ -40,8 +40,8 @@ def _yacl():
         git_repository,
         name = "yacl",
         remote = "https://github.com/reacher1130/yacl.git",
-        # tag = "0.4.5b7_nightly_20240930",
-        commit = "ccabb41282cfac2adc13e3d0add8803d99957806",
+        tag = "0.4.5b7_nightly_20240930",
+        commit = "0cb43464264eaa29ebc1eef5704e87202fb711c2",
     )
 
 # def _yacl():
