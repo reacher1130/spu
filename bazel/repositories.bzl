@@ -35,22 +35,22 @@ def spu_deps():
     _yacl()
     _libpsi()
 
-# def _yacl():
-#     maybe(
-#         http_archive,
-#         name = "yacl",
-#         urls = [
-#             "https://github.com/secretflow/yacl/archive/refs/tags/0.4.5b4_nightly_20240731.tar.gz",
-#         ],
-#         strip_prefix = "yacl-0.4.5b4_nightly_20240731",
-#         sha256 = "952715bd56f6d9386984e9963426a1399bd2bd3702cf3efede9c82591cfab99b",
-#     )
 def _yacl():
-    git_repository(
+    maybe(
+        http_archive,
         name = "yacl",
-        remote = "https://github.com/reacher1130/yacl.git",
-        tag = "0.4.5b7_nightly_20240930",
+        urls = [
+            "https://github.com/secretflow/yacl/archive/refs/tags/0.4.5b4_nightly_20240731.tar.gz",
+        ],
+        strip_prefix = "yacl-0.4.5b4_nightly_20240731",
+        sha256 = "952715bd56f6d9386984e9963426a1399bd2bd3702cf3efede9c82591cfab99b",
     )
+# def _yacl():
+#     git_repository(
+#         name = "yacl",
+#         remote = "https://github.com/reacher1130/yacl.git",
+#         tag = "0.4.5b7_nightly_20240930",
+#     )
 
 def _libpsi():
     maybe(
