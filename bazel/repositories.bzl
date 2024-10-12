@@ -14,6 +14,7 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 def spu_deps():
     _bazel_skylib()
@@ -36,14 +37,23 @@ def spu_deps():
 
 def _yacl():
     maybe(
-        http_archive,
+        git_repository,
         name = "yacl",
-        urls = [
-            "https://github.com/secretflow/yacl/archive/refs/tags/0.4.5b7_nightly_20240930.tar.gz",
-        ],
-        strip_prefix = "yacl-0.4.5b7_nightly_20240930",
-        sha256 = "cf8dc7cceb9c5d05df00f1c086feec99d554db3e3cbe101253cf2a5a1adb9072",
+        remote = "https://github.com/reacher1130/yacl.git",
+        # tag = "0.4.5b7_nightly_20240930",
+        commit = "ccabb41282cfac2adc13e3d0add8803d99957806",
     )
+
+# def _yacl():
+#     maybe(
+#         http_archive,
+#         name = "yacl",
+#         urls = [
+#             "https://github.com/secretflow/yacl/archive/refs/tags/0.4.5b7_nightly_20240930.tar.gz",
+#         ],
+#         strip_prefix = "yacl-0.4.5b7_nightly_20240930",
+#         sha256 = "cf8dc7cceb9c5d05df00f1c086feec99d554db3e3cbe101253cf2a5a1adb9072",
+#     )
 
 def _libpsi():
     maybe(
