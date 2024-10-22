@@ -53,5 +53,4 @@ spu_cc_binary(
         ":beaver_server",
         "//libspu/core:logging",
     ],
-    linkopts = ["-static"],
 )
