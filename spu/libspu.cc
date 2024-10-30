@@ -26,6 +26,7 @@
 #include "yacl/link/algorithm/scatter.h"
 #include "yacl/link/context.h"
 #include "yacl/link/factory.h"
+#include "yacl/link/transport/blackbox_interconnect/mock_transport.h"
 
 #include "libspu/compiler/compile.h"
 #include "libspu/core/config.h"
@@ -38,6 +39,8 @@
 #include "libspu/device/symbol_table.h"
 #include "libspu/mpc/factory.h"
 #include "libspu/version.h"
+#include "absl/strings/match.h"
+#include "absl/strings/str_split.h"
 
 #ifdef CHECK_AVX
 #include "cpu_features/cpuinfo_x86.h"
@@ -67,6 +70,21 @@ namespace {
 }  // namespace
 
 #define NO_GIL py::call_guard<py::gil_scoped_release>()
+
+void StartTransport(){
+  static yacl::link::transport::blackbox_interconnect::MockTransport transport;
+  brpc::ChannelOptions options;
+  {
+    options.protocol = "http";
+    options.connection_type = "";
+    options.max_retry = 3;
+    options.timeout_ms = 1e4;
+    options.connect_timeout_ms = 20000;
+  }
+  transport.StartFromEnv(options);
+}
+
+
 
 void BindLink(py::module& m) {
   using yacl::link::CertInfo;
@@ -291,9 +309,10 @@ void BindLink(py::module& m) {
       },
       py::arg("desc"), py::arg("self_rank"), py::kw_only(),
       py::arg("log_details") = false);
+
   m.def(
-      "create_link_context_for_blackbox",
-      []() -> std::shared_ptr<Context> {
+      "CreateLinkContextForBlackBox",
+      [](bool start_stransport) -> std::shared_ptr<Context> {
         py::gil_scoped_release release;
         brpc::FLAGS_max_body_size = std::numeric_limits<uint64_t>::max();
         brpc::FLAGS_socket_max_unwritten_bytes = std::numeric_limits<int64_t>::max() / 2;
@@ -301,10 +320,34 @@ void BindLink(py::module& m) {
         desc.brpc_channel_protocol = "http";
         size_t self_rank;
         yacl::link::FactoryBrpcBlackBox::GetPartyNodeInfoFromEnv(desc.parties, self_rank);
+        if (start_stransport) {
+          StartTransport();
+        }
+
         auto ctx = yacl::link::FactoryBrpcBlackBox().CreateContext(desc, self_rank);
         ctx->ConnectToMesh();
         return ctx;
-      });
+      },
+      py::arg("start_stransport") = false);
+
+  m.def(
+    "CreateLinkContextForWhiteBox",
+    [](std::string_view parties, int32_t self_rank) -> std::shared_ptr<Context> {
+      py::gil_scoped_release release;
+      yacl::link::ContextDesc lctx_desc;
+      std::vector<std::string> hosts = absl::StrSplit(parties, ',');
+      for (std::size_t rank = 0; rank < hosts.size(); rank++){
+        const auto id = fmt::format("party{}", rank);
+        lctx_desc.parties.push_back({id, hosts[rank]});
+      }
+      auto ctx = yacl::link::FactoryBrpc().CreateContext(lctx_desc, self_rank);
+      ctx->ConnectToMesh();
+      return ctx;
+    },
+    py::arg("parties"), py::arg("self_rank"));
+
+
+
   m.def("create_mem",
         [](const ContextDesc& desc,
            size_t self_rank) -> std::shared_ptr<Context> {

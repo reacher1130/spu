@@ -35,25 +35,25 @@ def spu_deps():
     _yacl()
     _libpsi()
 
-# def _yacl():
-#     maybe(
-#         git_repository,
-#         name = "yacl",
-#         remote = "https://github.com/reacher1130/yacl.git",
-#         # tag = "0.4.5b7_nightly_20240930",
-#         commit = "b9bad99dd4244c4ccf9ee0ff95ef5ef8092486dc",
-#     )
-
 def _yacl():
     maybe(
-        http_archive,
+        git_repository,
         name = "yacl",
-        urls = [
-            "https://github.com/secretflow/yacl/archive/refs/tags/0.4.5b7_nightly_20240930.tar.gz",
-        ],
-        strip_prefix = "yacl-0.4.5b7_nightly_20240930",
-        sha256 = "cf8dc7cceb9c5d05df00f1c086feec99d554db3e3cbe101253cf2a5a1adb9072",
+        remote = "https://github.com/reacher1130/yacl.git",
+        # tag = "0.4.5b7_nightly_20241030",
+        commit = "4e2e2ada9e16f56d805bf5b18b8ae876106b57f7",
     )
+
+# def _yacl():
+#     maybe(
+#         http_archive,
+#         name = "yacl",
+#         urls = [
+#             "https://github.com/secretflow/yacl/archive/refs/tags/0.4.5b7_nightly_20240930.tar.gz",
+#         ],
+#         strip_prefix = "yacl-0.4.5b7_nightly_20240930",
+#         sha256 = "cf8dc7cceb9c5d05df00f1c086feec99d554db3e3cbe101253cf2a5a1adb9072",
+#     )
 def _libpsi():
     maybe(
         http_archive,
