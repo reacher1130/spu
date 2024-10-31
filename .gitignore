@@ -17,7 +17,7 @@ compile_commands.json
 Pipfile
 
 # python-package
-/dist
+
 *.egg-info
 __pycache__
 build
@@ -53,4 +53,3 @@ coverity*/
 idir/
 
 spu_wheel.name
-*.whl
