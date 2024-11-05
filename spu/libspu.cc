@@ -196,6 +196,9 @@ void BindLink(py::module& m) {
           "world_size", [](const Context* self) { return self->WorldSize(); },
           py::return_value_policy::copy, "the number of parties")
       .def(
+          "party_by_rank", [](Context* self, size_t rank) { return self->PartyIdByRank(rank); },
+          py::return_value_policy::copy, "get the party id by rank")
+      .def(
           "spawn",
           [](const std::shared_ptr<Context>& self) {
             return std::shared_ptr<Context>(self->Spawn());
