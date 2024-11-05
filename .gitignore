@@ -53,3 +53,5 @@ coverity*/
 idir/
 
 spu_wheel.name
+
+*.whl
