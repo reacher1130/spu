@@ -24,7 +24,7 @@ cd src_copied
 source ~/.bashrc
 conda create -n build python=3.10 -y
 conda activate build
-pip install -r requirements.txt
+pip install -r /home/admin/src/requirements.txt
 python3 setup.py bdist_wheel
 
 cp dist/* ../src/dev/pkg/
